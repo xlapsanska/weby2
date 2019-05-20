@@ -55,6 +55,7 @@ class LoginController extends Controller
 
 	protected function attemptLogin(Request $request)
 	{
+
 		$credentials = $request->only($this->username(), 'password');
 		$username = $credentials[$this->username()];
 		$password = $credentials['password'];
@@ -62,11 +63,27 @@ class LoginController extends Controller
 		$user_format = env('LDAP_USER_FORMAT', 'cn=%s,'.env('LDAP_BASE_DN', ''));
 		$userdn = sprintf($user_format, $username);
 
+		$dn  = 'ou=People, dc=stuba, dc=sk';
+		$ldaprdn  = "uid=$username, $dn";
 
+		$ldapconn = ldap_connect("ldap.stuba.sk")
+		or die("Could not connect to LDAP server.");
 
-		// you might need this, as reported in
-		// [#14](https://github.com/jotaelesalinas/laravel-simple-ldap-auth/issues/14):
-		// Adldap::auth()->bind($userdn, $password);
+		ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
+
+		$bind = @ldap_bind($ldapconn, $ldaprdn, $password);
+		if($bind) {
+			$filter="(uid=$username)";
+			$result = ldap_search($ldapconn,"dc=stuba,dc=sk",$filter);
+			$entry = ldap_first_entry($ldapconn, $result);
+			$usrId = ldap_get_values($ldapconn, $entry, "uisid")[0];
+			//$firstname = ldap_get_values($ldapconn, $entry, "givenname")[0];
+			//$lastname = ldap_get_values($ldapconn, $entry, "sn")[0];
+			//$email = ldap_get_values($ldapconn, $entry, "mail")[0];
+			//$logName = ldap_get_values($ldapconn, $entry, "uid")[0];
+		}
+		else
+			$usrId = "00000";
 
 		$user = \App\User::where("username", "admin")->first();
 		if(($username == "admin") and Hash::check($password, $user->password)) {
@@ -83,6 +100,7 @@ class LoginController extends Controller
 
 				$user = new \App\User();
 				$user->username = $username;
+				$user->ais_id = $usrId;
 				$user->password = '';
 				$user->isAdmin = 0;
 

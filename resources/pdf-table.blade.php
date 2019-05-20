@@ -1,0 +1,1 @@
+skurvená pičovina
