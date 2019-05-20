@@ -14,26 +14,26 @@
                         </div>
                     @endif
 
-	                @if(Auth::user()->isAdmin)
-		                    Vitaj {{ Auth::user()->name  }}
-	                @else
+	                {{--@if(Auth::user()->isAdmin)--}}
+		                    {{--Vitaj {{ Auth::user()->name  }}--}}
+	                {{--@else--}}
 
 
-						<table>
-							<tr>
-								@foreach($hlavicka as $h)
-									<th>{{ $h }}</th>
-								@endforeach
-							</tr>
+						{{--<table>--}}
+							{{--<tr>--}}
+								{{--@foreach($hlavicka as $h)--}}
+									{{--<th>{{ $h }}</th>--}}
+								{{--@endforeach--}}
+							{{--</tr>--}}
 
-							<tr>
-								@foreach($zaznam as $z)
-									<td>{{ $z }}</td>
-								@endforeach
-							</tr>
+							{{--<tr>--}}
+								{{--@foreach($zaznam as $z)--}}
+									{{--<td>{{ $z }}</td>--}}
+								{{--@endforeach--}}
+							{{--</tr>--}}
 
-						</table>
-	                @endif
+						{{--</table>--}}
+	                {{--@endif--}}
 
                 </div>
             </div>

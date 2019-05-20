@@ -3,43 +3,49 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
+        <div class="col-12">
+            @if($message = Session::get('success'))
+            <div class="alert alert-success">
+                <p>{{$message}}</p>
+            </div>
 
-	@if($message = Session::get('success'))
-		<div class="alert alert-success">
-			<p>{{$message}}</p>
-		</div>
-	
-	@endif
+            @endif
+        </div>
+
+    </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header">Pridanie výsledkov</div>
+                <div class="card-header">@lang('result_admin.add_results')</div>
 
                 <div class="card-body">
 
                     @php
                     echo Form::open(array('url' => '/uploadfile','files'=>'true'));
-        
+
                     @endphp
                     <div class="form-group">
-                        <label for="year">Školský rok</label>
+                        <label for="year">@lang('result_admin.school_year')</label>
                         <select class="form-control" id="year" name="year">
-                            <option value="2019">2018/2019</option>
-                            <option value="2018">2017/2018</option>
-                            <option value="2017">2016/2017</option>
-
+                            <option value="2018/2019">2018/2019</option>
+                            <option value="2017/2018">2017/2018</option>
+                            <option value="2016/2017">2016/2017</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="subject">Predmet</label>
+                        <label for="subject">@lang('result_admin.subject')</label>
                         <input type="text" class="form-control" id="subject" name="subject" aria-describedby="emailHelp"
-                            placeholder="Zadajte názov predmetu">
+                            placeholder="@lang('result_admin.subject_name')">
 
                     </div>
                     <div class="form-group">
-                        <label for="separator">Oddelovač</label>
+                        <label for="separator">@lang('result_admin.delimeter')</label>
                         <select class="form-control" id="separator" name="separator">
-                            <option value="c">, (čiarka)</option>
-                            <option value="b">; (bodkočiarka)</option>
+                            <option value=",">@lang('result_admin.comma')</option>
+                            <option value=";">@lang('result_admin.semicolon')</option>
 
                         </select>
                     </div>

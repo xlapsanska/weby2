@@ -12,15 +12,39 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	\Illuminate\Support\Facades\Auth::logout();
+    return view('auth.login');
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('resultAdmin/create', 'ResultAdminController@create')->name('resultAdmin-create');
-Route::post('resultAdmin', 'ResultAdminController@store')->name('resultAdmin-store');
-Route::post('/uploadfile','ResultAdminController@showUploadFile');
+Route::get('locale/{locale}',function($locale){
+    Session::put('locale',$locale);
+    return redirect()->back();
+});
+
+Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
+Route::get('resultAdmin', 'ResultAdminController@index')->name('resultAdmin-index')->middleware('admin')->middleware('auth');
+Route::get('teamAdmin', 'TeamAdminController@index')->name('teamAdmin-index')->middleware('admin')->middleware('auth');
+Route::get('resultStudent', 'ResultStudentController@index')->name('resultStudent-index')->middleware('auth');
+
+Route::get('resultAdmin-create', 'ResultAdminController@create')->name('resultAdmin-create')->middleware('admin')->middleware('auth');
+Route::get('teamAdmin-create', 'TeamAdminController@create')->name('teamAdmin-create')->middleware('admin')->middleware('auth');
+Route::post('teamPoint-store', 'TeamPointController@store')->name('teamPoint-store')->middleware('admin')->middleware('auth');
+Route::get('pointStudent-create', 'TeamStudentController@create')->name('pointStudent-create')->middleware('auth');
+
+Route::get('teamPoint-create/{team_fk}', 'TeamPointController@create')->name('teamPoint-create')->middleware('admin')->middleware('auth');
+Route::post('resultAdmin', 'ResultAdminController@store')->name('resultAdmin-store')->middleware('admin')->middleware('auth');
+Route::post('/uploadfile','ResultAdminController@showUploadFile')->middleware('auth');
+Route::post('/uploadfileteam','TeamAdminController@showUploadFile')->middleware('auth');
+Route::delete('deleteSubject/{id}','ResultAdminController@deleteSubject')->name('deleteSubject')->middleware('auth');
+Route::get('/pdf/{id}','ResultAdminController@exportPdf')->middleware('auth');
+
+Route::get('mailAdmin-create', 'MailController@create')->name('mailAdmin-create')->middleware('admin')->middleware('auth');
+Route::post('/mailUpload','MailController@showUploadFile')->middleware('admin','auth');
+Route::post('mailAdmin-create','MailController@sendMail')->middleware('admin','auth');
+
+
 // Route::redirect('resultAdmin', 'ResultAdminController');
 // Route::resource('resultAdmin', 'ResultAdminController');
 

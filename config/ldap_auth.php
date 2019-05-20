@@ -134,7 +134,6 @@ return [
         'ldap' => [
 
 	        'discover' => env('LDAP_USER_ATTRIBUTE', 'userprincipalname'),
-
 	        'authenticate' => env('LDAP_USER_ATTRIBUTE', 'distinguishedname'),
 
         ],
