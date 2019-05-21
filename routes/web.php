@@ -24,6 +24,7 @@ Route::get('locale/{locale}',function($locale){
 });
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
+Route::get('downloadPDF', 'HomeController@downloadPDF')->name('downloadPDF')->middleware('auth');
 Route::get('resultAdmin', 'ResultAdminController@index')->name('resultAdmin-index')->middleware('admin')->middleware('auth');
 Route::get('teamAdmin', 'TeamAdminController@index')->name('teamAdmin-index')->middleware('admin')->middleware('auth');
 Route::get('resultStudent', 'ResultStudentController@index')->name('resultStudent-index')->middleware('auth');
@@ -47,6 +48,14 @@ Route::get('/pdf/{id}','ResultAdminController@exportPdf')->middleware('auth');
 
 Route::get('mailAdmin-create', 'MailController@create')->name('mailAdmin-create')->middleware('admin')->middleware('auth');
 Route::post('/mailUpload','MailController@showUploadFile')->middleware('admin','auth');
+Route::post('mailAdmin-create','MailController@sendMail')->middleware('admin','auth');
+Route::view('/summernote','summernote');
+
+//summernote store route
+Route::post('/summernote','SummernoteController@store')->name('summernotePersist');
+
+//summernote display route
+Route::get('/summernote_display','SummernoteController@show')->name('summernoteDispay');
 
 // Route::redirect('resultAdmin', 'ResultAdminController');
 // Route::resource('resultAdmin', 'ResultAdminController');

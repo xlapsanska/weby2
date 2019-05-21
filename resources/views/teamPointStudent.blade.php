@@ -30,7 +30,7 @@
 			        <div class="card mb-3">
 				        <div class="card-header" id="headingOne{{ $team->id }}">
 					        <div class="row">
-						        <div class="col-md-4 btn text-left" data-toggle="collapse" data-target="#collapseOne{{ $team->id }}" aria-expanded="true" aria-controls="collapseOne{{ $team->id }}">
+						        <div class="col-md-5 btn text-left" data-toggle="collapse" data-target="#collapseOne{{ $team->id }}" aria-expanded="true" aria-controls="collapseOne{{ $team->id }}">
 							        <h5 class="mb-0">
 								        <a class="">
 									        <span class="h6">{{ $team->subject }} {{ $team->year }}</span>
@@ -40,25 +40,30 @@
 								        </a>
 							        </h5>
 						        </div>
-						        <div class="col-md-6">
-								        <div class="row d-flex justify-content-end align-items-center">
-									        <div class="col-md-3 mb-md-0 mb-2 ">
-										        <p class="mb-0 text-right">@lang('result_admin.t2_points'):</p>
-									        </div>
-									        <div class="col-md-3 mb-md-0 mb-2">
-										        <input type="number" class="form-control text-center" id="points" name="points" disabled placeholder="{{ $team->t_points }}">
-									        </div>
+						        <div class="col-md-7">
+							        <div class="row d-flex justify-content-end align-items-center text-right">
+								        <div class="col-md-4 mb-md-0 mb-2 ">
+									        <p class="mb-0 text-right">@lang('result_admin.t2_points'):</p>
 								        </div>
-						        </div>
-						        <div class="col-md-2">
-							        <form action="{{route('teamPoint-csv')}}" method="post">
+								        <div class="col-md-3 mb-md-0 mb-2">
+									        <input type="number" class="form-control text-center" id="points" name="points" disabled placeholder="{{ $team->t_points }}">
+								        </div>
+
+							        <form class="col-md-5" action="{{route('teamPoint-csv')}}" method="post">
 								        @csrf
 								        <input type="hidden" id="team_fk" name="team_fk" value="{{ $team->id }}">
-								        <button type="submit" class="btn btn-block btn-dark">
-									        <i class="fas fa-file-export text-white"></i>
-									        <span class="ml-2">CSV</span>
-								        </button>
+								        <div class="btn-group" role="group" aria-label="Basic example">
+									        <button type="submit" class="btn btn-dark">
+										        <i class="fas fa-file-export text-white"></i>
+										        <span class="ml-2">CSV</span>
+									        </button>
+									        <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseStatistic{{ $team->id }}" aria-expanded="false" aria-controls="collapseStatistic{{ $team->id }}">
+										        <i class="fas fa-chart-pie text-white"></i>
+										        <span class="ml-2">@lang('result_admin.t2_btn_statistics')</span>
+									        </button>
+								        </div>
 							        </form>
+							        </div>
 						        </div>
 					        </div>
 
@@ -66,6 +71,126 @@
 
 				        <div id="collapseOne{{ $team->id }}" class="collapse show" aria-labelledby="headingOne{{ $team->id }}" data-parent="#accordion">
 					        <div class="card-body">
+						        <div class="collapse mb-3" id="collapseStatistic{{ $team->id }}">
+							        <div class="card card-body">
+								        <div class="row">
+									        <div class="col-md-6">
+										        <div class="row">
+											        <div class="col-12">
+												        <ul class="list-group">
+													        <li class="list-group-item d-flex justify-content-between align-items-center">
+														        @lang('result_admin.t2_stat_count_student')
+														        <p class="mb-0 h4">
+														        <span class="badge badge-primary badge-pill">
+															        {{ App\TeamPoint::countStudents($team->subject, $team->year)}}
+														        </span>
+														        </p>
+													        </li>
+													        <li class="list-group-item d-flex justify-content-between align-items-center">
+														        @lang('result_admin.t2_stat_count_student_agree')
+														        <p class="mb-0 h4">
+														        <span class="badge badge-primary badge-pill">
+															        {{ App\TeamPoint::countStudentsAgree($team->subject, $team->year, 1)}}
+														        </span>
+														        </p>
+													        </li>
+													        <li class="list-group-item d-flex justify-content-between align-items-center">
+														        @lang('result_admin.t2_stat_count_student_disagree')
+														        <p class="mb-0 h4">
+														        <span class="badge badge-primary badge-pill">
+														            {{ App\TeamPoint::countStudentsAgree($team->subject, $team->year, 0)}}
+													            </span>
+														        </p>
+													        </li>
+													        <li class="list-group-item d-flex justify-content-between align-items-center">
+														        @lang('result_admin.t2_stat_count_student_notreply')
+														        <p class="mb-0 h4">
+													        <span class="badge badge-primary badge-pill">
+													            {{ App\TeamPoint::countStudentsAgree($team->subject, $team->year, 2)}}
+												            </span>
+														        </p>
+													        </li>
+												        </ul>
+											        </div>
+											        <div class="col-12">
+												        <div id="chart-div{{ $team->id }}"></div>
+												        @php
+													        $reasons = Lava::DataTable();
+															$reasons->addStringColumn('Reasons')
+																	->addNumberColumn('Percent')
+																	->addRow(['súhlasiachich', App\TeamPoint::countStudentsAgree($team->subject, $team->year, 1)])
+																	->addRow(['nesúhlasiachich', App\TeamPoint::countStudentsAgree($team->subject, $team->year, 0)])
+																	->addRow(['ktorý sa nevyjadrili', App\TeamPoint::countStudentsAgree($team->subject, $team->year, 2)]);
+
+															Lava::DonutChart('countStudents'.$team->id, $reasons, [
+																'title' => 'Počet študentov'
+															]);
+												        @endphp
+												        {!! Lava::render('DonutChart', 'countStudents'.$team->id, 'chart-div'.$team->id) !!}
+											        </div>
+										        </div>
+									        </div>
+									        <div class="col-md-6">
+										        <div class="row">
+											        <div class="col-12">
+												        <ul class="list-group">
+													        <li class="list-group-item d-flex justify-content-between align-items-center">
+														        @lang('result_admin.t2_stat_count_team')
+														        <p class="mb-0 h4">
+												        <span class="badge badge-primary badge-pill">
+													        {{ App\TeamPoint::countTeams($team->subject, $team->year)}}
+												        </span>
+														        </p>
+													        </li>
+													        <li class="list-group-item d-flex justify-content-between align-items-center">
+														        @lang('result_admin.t2_stat_count_team_close')
+														        <p class="mb-0 h4">
+												        <span class="badge badge-primary badge-pill">
+													        {{ App\TeamPoint::countTeamsClose($team->subject, $team->year)}}
+												        </span>
+														        </p>
+													        </li>
+													        <li class="list-group-item d-flex justify-content-between align-items-center">
+														        @lang('result_admin.t2_stat_count_team_need_reply')
+														        <p class="mb-0 h4">
+												        <span class="badge badge-primary badge-pill">
+												            {{ App\TeamPoint::countTeamsResponseAdmin($team->subject, $team->year)}}
+											            </span>
+														        </p>
+													        </li>
+													        <li class="list-group-item d-flex justify-content-between align-items-center">
+														        @lang('result_admin.t2_stat_count_team_student_notreply')
+														        <p class="mb-0 h4">
+												        <span class="badge badge-primary badge-pill">
+												            {{ App\TeamPoint::countTeamsResponseStudents($team->subject, $team->year)}}
+											            </span>
+														        </p>
+													        </li>
+												        </ul>
+											        </div>
+											        <div class="col-12">
+												        <div id="chart-div-team{{ $team->id }}"></div>
+												        @php
+													        $reasons = Lava::DataTable();
+															$reasons->addStringColumn('Reasons')
+																	->addNumberColumn('Percent')
+																	->addRow(['uzavretých',  App\TeamPoint::countTeamsClose($team->subject, $team->year)])
+																	->addRow(['ku ktorým sa treba vyjadriť', App\TeamPoint::countTeamsResponseAdmin($team->subject, $team->year)])
+																	->addRow(['s nevyjadrenými študentami', App\TeamPoint::countTeamsResponseStudents($team->subject, $team->year)]);
+
+															Lava::DonutChart('countTeams'.$team->id, $reasons, [
+																'title' => 'Počet tímov'
+															]);
+												        @endphp
+												        {!! Lava::render('DonutChart', 'countTeams'.$team->id, 'chart-div-team'.$team->id) !!}
+											        </div>
+										        </div>
+									        </div>
+								        </div>
+
+							        </div>
+						        </div>
+
 						        @if(App\TeamPoint::teamCaptain($team->id))
 									@if($team->agree == 2)
 										<div class="row mb-3">

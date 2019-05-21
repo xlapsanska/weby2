@@ -130,21 +130,14 @@ class TeamAdminController extends Controller
 							]);
 						}
 						else {
-							$teams = DB::table('team_points')
-										->select('id')
-										->where('year', $year)
-										->where('team', intval($team))
-										->where('subject', $subject)
-										->get();
+							$team_points = TeamPoint::find($over->id);
+							$team_points->delete();
 
-							foreach ($teams as $team) {
-								$t = TeamPoint::find($team->id);
-								$t->t_points = 0;
-								$t->studentsAgree = 0;
-								$t->adminAgree = 0;
-								$t->timestamps = false;
-								$t->save();
-							}
+							DB::table('team_points')->insert([
+								'year' => $year,
+								'team' => intval($team),
+								'subject' => $subject,
+							]);
 						}
 					}
 				}
@@ -191,26 +184,20 @@ class TeamAdminController extends Controller
 						}
 						else {
 
-							$students = DB::table('students')
-											->where('ais_id', $ais_id)
-											->where('team_fk', $team_point_fk->id)
-											->get();
+							$sudents = Student::find($overStudent->id);
+							$sudents->delete();
 
-							foreach ($students as $student) {
-								$s = Student::find($student->id);
-								$s->points = 0;
-								$s->agree = 2;
-								$s->isCaptain = 0;
-								$s->timestamps = false;
-								$s->save();
-							}
+							DB::table('students')->insert([
+								'name' => $meno,
+								'email' => $email,
+								'password' => $heslo,
+								'ais_id' => $ais_id,
+								'team_fk' => $team_point_fk->id,
+							]);
 						}
 					}
 				}
 			}
-
-			//dd("ss");
-
 			return redirect()->route('teamPoint-create', ['team_fk' => $team_fk])->with('success', 'Nový študenti pridaný.');
 		}
 

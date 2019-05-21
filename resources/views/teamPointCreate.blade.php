@@ -63,7 +63,8 @@
 										        <span class="ml-2">CSV</span>
 									        </button>
 								        <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseStatistic{{ $team->id }}" aria-expanded="false" aria-controls="collapseStatistic{{ $team->id }}">
-									        Statistiky
+									        <i class="fas fa-chart-pie text-white"></i>
+									        <span class="ml-2">@lang('result_admin.t2_btn_statistics')</span>
 								        </button>
 							        </div>
 							        </form>
@@ -78,12 +79,12 @@
 						        <div class="collapse mb-3" id="collapseStatistic{{ $team->id }}">
 							        <div class="card card-body">
 								        <div class="row">
-									        <div class="col-6">
+									        <div class="col-md-6">
 										        <div class="row">
 											        <div class="col-12">
 												        <ul class="list-group">
 													        <li class="list-group-item d-flex justify-content-between align-items-center">
-														        Počet študentov v predmete
+														        @lang('result_admin.t2_stat_count_student')
 														        <p class="mb-0 h4">
 														        <span class="badge badge-primary badge-pill">
 															        {{ App\TeamPoint::countStudents($team->subject, $team->year)}}
@@ -91,7 +92,7 @@
 														        </p>
 													        </li>
 													        <li class="list-group-item d-flex justify-content-between align-items-center">
-														        Počet súhlasiachich študentov
+														        @lang('result_admin.t2_stat_count_student_agree')
 														        <p class="mb-0 h4">
 														        <span class="badge badge-primary badge-pill">
 															        {{ App\TeamPoint::countStudentsAgree($team->subject, $team->year, 1)}}
@@ -99,7 +100,7 @@
 														        </p>
 													        </li>
 													        <li class="list-group-item d-flex justify-content-between align-items-center">
-														        Počet nesúhlasiachich študentov
+														        @lang('result_admin.t2_stat_count_student_disagree')
 														        <p class="mb-0 h4">
 														        <span class="badge badge-primary badge-pill">
 														            {{ App\TeamPoint::countStudentsAgree($team->subject, $team->year, 0)}}
@@ -107,7 +108,7 @@
 														        </p>
 													        </li>
 													        <li class="list-group-item d-flex justify-content-between align-items-center">
-														        Počet študentov, ktorí sa nevyjadrili
+														        @lang('result_admin.t2_stat_count_student_notreply')
 														        <p class="mb-0 h4">
 													        <span class="badge badge-primary badge-pill">
 													            {{ App\TeamPoint::countStudentsAgree($team->subject, $team->year, 2)}}
@@ -134,12 +135,12 @@
 											        </div>
 										        </div>
 									        </div>
-									        <div class="col-6">
+									        <div class="col-md-6">
 										        <div class="row">
 											        <div class="col-12">
 												        <ul class="list-group">
 													        <li class="list-group-item d-flex justify-content-between align-items-center">
-														        Počet tímov v predmete
+														        @lang('result_admin.t2_stat_count_team')
 														        <p class="mb-0 h4">
 												        <span class="badge badge-primary badge-pill">
 													        {{ App\TeamPoint::countTeams($team->subject, $team->year)}}
@@ -147,7 +148,7 @@
 														        </p>
 													        </li>
 													        <li class="list-group-item d-flex justify-content-between align-items-center">
-														        Počet uzavretých tímov
+														        @lang('result_admin.t2_stat_count_team_close')
 														        <p class="mb-0 h4">
 												        <span class="badge badge-primary badge-pill">
 													        {{ App\TeamPoint::countTeamsClose($team->subject, $team->year)}}
@@ -155,7 +156,7 @@
 														        </p>
 													        </li>
 													        <li class="list-group-item d-flex justify-content-between align-items-center">
-														        Počet tímov, ku ktorým sa treba vyjadriť
+														        @lang('result_admin.t2_stat_count_team_need_reply')
 														        <p class="mb-0 h4">
 												        <span class="badge badge-primary badge-pill">
 												            {{ App\TeamPoint::countTeamsResponseAdmin($team->subject, $team->year)}}
@@ -163,7 +164,7 @@
 														        </p>
 													        </li>
 													        <li class="list-group-item d-flex justify-content-between align-items-center">
-														        Počet tímov s nevyjadrenými študentami
+														        @lang('result_admin.t2_stat_count_team_student_notreply')
 														        <p class="mb-0 h4">
 												        <span class="badge badge-primary badge-pill">
 												            {{ App\TeamPoint::countTeamsResponseStudents($team->subject, $team->year)}}

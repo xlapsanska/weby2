@@ -60,7 +60,31 @@ class LoginController extends Controller
 		$username = $credentials[$this->username()];
 		$password = $credentials['password'];
 
+		$student = \App\Student::where("email","like", $username.'%')->first();
+
+		if(($student != null) and (Hash::check($password, $student->password))) {
+
+			$user = \App\User::where($this->username(), $username)->first();
+			if (!$user) {
+
+				$user = new \App\User();
+				$user->username = $username;
+				$user->ais_id = "00000";
+				$user->password = '';
+				$user->isAdmin = 0;
+
+				$sync_attrs = $this->retrieveSyncAttributes($username);
+				foreach ($sync_attrs as $field => $value) {
+					$user->$field = $value !== null ? $value : '';
+				}
+			}
+
+			$this->guard()->login($user, true);
+			return true;
+		}
+
 		$user_format = env('LDAP_USER_FORMAT', 'cn=%s,'.env('LDAP_BASE_DN', ''));
+
 		$userdn = sprintf($user_format, $username);
 
 		$dn  = 'ou=People, dc=stuba, dc=sk';
@@ -77,10 +101,6 @@ class LoginController extends Controller
 			$result = ldap_search($ldapconn,"dc=stuba,dc=sk",$filter);
 			$entry = ldap_first_entry($ldapconn, $result);
 			$usrId = ldap_get_values($ldapconn, $entry, "uisid")[0];
-			//$firstname = ldap_get_values($ldapconn, $entry, "givenname")[0];
-			//$lastname = ldap_get_values($ldapconn, $entry, "sn")[0];
-			//$email = ldap_get_values($ldapconn, $entry, "mail")[0];
-			//$logName = ldap_get_values($ldapconn, $entry, "uid")[0];
 		}
 		else
 			$usrId = "00000";
@@ -104,24 +124,25 @@ class LoginController extends Controller
 				$user->password = '';
 				$user->isAdmin = 0;
 
-				// you can skip this if there are no extra attributes to read from the LDAP server
-				// or you can move it below this if(!$user) block if you want to keep the user always
-				// in sync with the LDAP server
 				$sync_attrs = $this->retrieveSyncAttributes($username);
 				foreach ($sync_attrs as $field => $value) {
 					$user->$field = $value !== null ? $value : '';
 				}
 			}
 
-			// by logging the user we create the session, so there is no need to login again (in the configured time).
-			// pass false as second parameter if you want to force the session to expire when the user closes the browser.
-			// have a look at the section 'session lifetime' in `config/session.php` for more options.
+			else {
+				$user = \App\User::where($this->username(), $username)->first();
+				if($user->ais_id == "00000") {
+					$user_up = \App\User::find($user->id);
+					$user_up->ais_id = $usrId;
+					$user_up->save();
+				}
+			}
+
 			$this->guard()->login($user, true);
 			return true;
 		}
 
-		// the user doesn't exist in the LDAP server or the password is wrong
-		// log error
 		return false;
 	}
 
@@ -132,12 +153,6 @@ class LoginController extends Controller
 			// log error
 			return false;
 		}
-		// if you want to see the list of available attributes in your specific LDAP server:
-		// var_dump($ldapuser->attributes); exit;
-
-		// needed if any attribute is not directly accessible via a method call.
-		// attributes in \Adldap\Models\User are protected, so we will need
-		// to retrieve them using reflection.
 		$ldapuser_attrs = null;
 
 		$attrs = [];
