@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use http\Env\Response;
 
 class HomeController extends Controller
 {
@@ -41,5 +42,16 @@ class HomeController extends Controller
 	    return view('home')
 		    ->with(compact('hlavicka'))
 		    ->with(compact('zaznam'));
+    }
+
+    public function downloadPDF(){
+
+		    $file= public_path(). "/download/tim_9-dokumentacia.pdf";
+
+		    $headers = array(
+			    'Content-Type: application/pdf',
+		    );
+
+		    return \Illuminate\Support\Facades\Response::download($file, 'tim_9_dokumentacia.pdf', $headers);
     }
 }

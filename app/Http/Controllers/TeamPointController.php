@@ -81,22 +81,6 @@ class TeamPointController extends Controller
 		$teams = DB::table("team_points")->get();
 
 
-		//$lava = Lava::Lavacharts;
-		//
-		//$reasons = $lava->DataTable();
-		//
-		//$reasons->addStringColumn('Reasons')
-		//	->addNumberColumn('Percent')
-		//	->addRow(['Check Reviews', 5])
-		//	->addRow(['Watch Trailers', 2])
-		//	->addRow(['See Actors Other Work', 4])
-		//	->addRow(['Settle Argument', 89]);
-		//
-		//$lava->DonutChart('IMDB', $reasons, [
-		//	'title' => 'Reasons I visit IMDB'
-		//]);
-
-
 		return view('teamPointCreate')
 			->with(compact('teams'))
 			->with(compact('teams_users'));

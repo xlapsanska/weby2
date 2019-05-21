@@ -19,7 +19,19 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+	{{--<script src="//cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>--}}
+	{{--<link href="{{ asset('css/signin.css') }}" rel="stylesheet">--}}
+	{{--<script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>--}}
+	{{--<script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>--}}
 
+	{{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">--}}
+	{{--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>--}}
+	{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>--}}
+	{{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>--}}
+	{{--<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.css" rel="stylesheet">--}}
+	{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.js"></script>--}}
+	{{--<script src="https://cdn.ckeditor.com/ckeditor5/12.1.0/classic/ckeditor.js"></script>--}}
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
 	<script
@@ -43,6 +55,7 @@
 
     {{-- <script src="{!! asset('vendor/DataTables/datatables.js') !!}" defer></script> --}}
     <script type="text/javascript" src="{!! asset('js/datatable.js') !!}" defer></script>
+    {{--<script type="text/javascript" src="{!! asset('js/script.js') !!}" defer></script>--}}
     {{-- <style>
         .print-btn {
     display: inline-block !important;
@@ -72,47 +85,79 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{{ route('home') }}">
                     {{ config('app.name', 'WebTe2') }}
                 </a>
-                {{--<button class="navbar-toggler" type="button" data-toggle="collapse"--}}
-                    {{--data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"--}}
-                    {{--aria-label="{{ __('Toggle navigation') }}">--}}
-                    {{--<span class="navbar-toggler-icon"></span>--}}
-                {{--</button>--}}
+	            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		            <span class="navbar-toggler-icon"></span>
+	            </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
+
+	            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     @auth
 
 						@if(\Illuminate\Support\Facades\Auth::user()->isAdmin)
 	                    <ul class="navbar-nav mr-auto">
-	                        <li class="nav-item">
-	                            <a class="nav-link" href="{{ route('resultAdmin-create') }}">@lang('result_admin.add_subject')</a>
-	                        </li>
-	                        <li class="nav-item">
-	                            <a class="nav-link" href="{{ route('resultAdmin-index') }}">@lang('result_admin.all_subjects')</a>
-	                        </li>
 		                    <li class="nav-item">
-			                    <a class="nav-link" href="{{ route('teamAdmin-create') }}">@lang('result_admin.add_students')</a>
-                            </li>
-		                    <li class="nav-item">
-			                    <a class="nav-link" href="{{ route('teamPointAll-create') }}">@lang('result_admin.add_points')</a>
+			                    <a class="nav-link" href="{{ route('home') }}">@lang('result_admin.division_tasks')</a>
 		                    </li>
+		                    <li class="nav-item">
+			                    <a class="nav-link" href="{{ route('downloadPDF') }}">@lang('result_admin.download_pdf')</a>
+		                    </li>
+	                        {{--<li class="nav-item">--}}
+	                            {{--<a class="nav-link" href="{{ route('resultAdmin-create') }}">@lang('result_admin.add_subject')</a>--}}
+	                        {{--</li>--}}
+		                    <li class="nav-item dropdown">
+			                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			                        @lang('result_admin.tasks') 1
+			                    </a>
+			                    <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+				                    <a class="dropdown-item" href="{{ route('resultAdmin-create') }}">@lang('result_admin.add_subject')</a>
+				                    <a class="dropdown-item" href="{{ route('resultAdmin-index') }}">@lang('result_admin.all_subjects')</a>
+			                    </div>
+		                    </li>
+
+	                        {{--<li class="nav-item">--}}
+	                            {{--<a class="nav-link" href="{{ route('resultAdmin-index') }}">@lang('result_admin.all_subjects')</a>--}}
+	                        {{--</li>--}}
+		                    <li class="nav-item dropdown">
+			                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				                    @lang('result_admin.tasks') 2
+			                    </a>
+			                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				                    <a class="dropdown-item" href="{{ route('teamAdmin-create') }}">@lang('result_admin.add_students')</a>
+				                    <a class="dropdown-item" href="{{ route('teamPointAll-create') }}">@lang('result_admin.add_points')</a>
+			                    </div>
+		                    </li>
+		                    {{--<li class="nav-item">--}}
+			                    {{--<a class="nav-link" href="{{ route('teamAdmin-create') }}">@lang('result_admin.add_students')</a>--}}
+                            {{--</li>--}}
+		                    {{--<li class="nav-item">--}}
+			                    {{--<a class="nav-link" href="{{ route('teamPointAll-create') }}">@lang('result_admin.add_points')</a>--}}
+		                    {{--</li>--}}
                             <li class="nav-item">
 			                    <a class="nav-link" href="{{ route('mailAdmin-create') }}">@lang('result_admin.send_emails')</a>
 		                    </li>
+
 	                    </ul>
 	                    @else
 		                    <ul class="navbar-nav mr-auto">
+			                    <li class="nav-item">
+				                    <a class="nav-link" href="{{ route('home') }}">@lang('result_admin.division_tasks')</a>
+			                    </li>
+			                    <li class="nav-item">
+				                    <a class="nav-link" href="{{ route('downloadPDF') }}">@lang('result_admin.download_pdf')</a>
+			                    </li>
 			                    <li class="nav-item">
 				                    <a class="nav-link" href="{{ route('resultStudent-index') }}">@lang('result_admin.show_results')</a>
 			                    </li>
 			                    <li class="nav-item">
 				                    <a class="nav-link" href="{{ route('pointStudent-create') }}">@lang('result_admin.add_points')</a>
 			                    </li>
+
 		                    </ul>
 	                    @endif
 
@@ -121,17 +166,13 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-	                    {{--@auth--}}
 		                    <li class="nav-item">
 			                    <a class="nav-link text-grey-800" href="locale/sk">{{ __('SK') }}</a>
 		                    </li>
 		                    <li class="nav-item  text-grey-800 mr-5">
 			                    <a class="nav-link" href="locale/en">{{ __('EN') }}</a>
 		                    </li>
-		                 {{--@endauth--}}
                         @guest
-                        {{--@if(!Auth::user()->isAdmin)--}}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">@lang('result_admin.login')</a>
                         </li>
@@ -154,7 +195,6 @@
                                 </form>
                             </div>
                         </li>
-                        {{--@endif--}}
 	                    @endguest
                     </ul>
                 </div>

@@ -11,9 +11,17 @@ return [
     'comma' => ', (čiarka)',
     'semicolon' => '; (bodkočiarka)',
     'show_results' => 'Zobraziť výsledky',
+    'division_tasks' => 'Rozdelenie úloh',
+    'name' => 'Meno',
+    'last_name' => 'Priezvisko',
+    'full_name' => 'Meno Priezvisko',
+    'tasks' => 'Úloha',
+    'distribution_privileges' => 'Rozdelenie privilégií',
+    'language_add' => 'Viacjazyčnosť',
 
     'delete' => 'Vymazať',
     'pdf' => 'Konvertovať do PDF',
+    'download_pdf' => 'Dokumentácia',
 
 
     // login
@@ -39,9 +47,42 @@ return [
     't2_msg_admin_disagree' => 'Admin nesúhlasí s rozdelením bodov študentov',
     't2_msg_student_disagree' => 'Neúhlasíte s rozdelenými bodmi',
     't2_btn_add_points' => 'Prideliť body',
+    't2_btn_statistics' => 'Štatistiky',
+    't2_stat_count_student' => 'Počet študentov v predmete',
+    't2_stat_count_student_agree' => 'Počet súhlasiachich študentov',
+    't2_stat_count_student_disagree' => 'Počet nesúhlasiachich študentov',
+    't2_stat_count_student_notreply' => 'Počet študentov, ktorí sa nevyjadrili',
+    't2_stat_count_team' => 'Počet tímov v predmete',
+    't2_stat_count_team_close' => 'Počet uzavretých tímov',
+    't2_stat_count_team_need_reply' => 'Počet tímov, ku ktorým sa treba vyjadriť',
+    't2_stat_count_team_student_notreply' => 'Počet tímov s nevyjadrenými študentami',
+
+    't2_graph_count_student' => 'Počet študentov v predmete',
+    't2_graph_count_student_agree' => 'súhlasiachich',
+    't2_graph_count_student_disagree' => 'nesúhlasiachich',
+    't2_graph_count_student_notreply' => 'ktorí sa nevyjadrili',
+    't2_graph_count_team' => 'Počet tímov v predmete',
+    't2_graph_count_team_close' => 'uzavretých',
+    't2_graph_count_team_need_reply' => 'ku ktorým sa treba vyjadriť',
+    't2_graph_count_team_student_notreply' => 's nevyjadrenými študentami',
 
 
 
     //3.uloha
-    'send_emails' => 'Odoslať e-maily'
+    'send_emails' => 'Odoslať e-maily',
+    'email_type' => 'Vyberte typ zobrazenia e-mailu',
+    'mail_form' => 'Formulár',
+    'form_purpose' => 'Tento formulár slúži na nastavenie farby textu jednotlivých položiek emailu.',
+    'blue' => 'Modrá',
+    'red' => 'Červená',
+    'black' => 'Čierna',
+    'ip' => 'ip adresa:',
+    'login_mail' => 'prihlasovacie meno:',
+    'passwird_mail' => 'heslo:',
+    'receiver' => 'Príjemca:',
+    'date' => 'Dátum',
+    'name' => 'Meno',
+    'subject_email' => 'Predmet správy',
+    'password_generate' => 'Vygenerujte nové heslá',
+    'csv_mail' => 'Nahrajte súbor s údajmi',
 ];
